@@ -1,4 +1,6 @@
 Deep Learning-Driven Abstractive Dialogue Summarization System
+
+
 An end-to-end, hardware-optimized natural language processing (NLP) system designed to automate abstractive summary generation from multi-turn conversational transcripts. The architecture fine-tunes a T5 (Text-to-Text Transfer Transformer) sequence-to-sequence model on complex dialogue interactions, deploying it via a high-performance, asynchronous FastAPI backend coupled with a non-blocking, responsive vanilla web client.
 
 🏗️ Architectural Topology
