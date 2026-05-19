@@ -7,11 +7,11 @@ An end-to-end, hardware-optimized natural language processing (NLP) system desig
 
 The software design isolates the structural training and cross-validation pipelines from the highly optimized inference server component:
 
-Model Engineering Module (Text_summarizer.ipynb): Houses the experimental sandbox, including token length distribution analysis, PyTorch optimization loops, hyperparameter metrics validation, and model serialization.
+1. Model Engineering Module (Text_summarizer.ipynb): Houses the experimental sandbox, including token length distribution analysis, PyTorch optimization loops, hyperparameter metrics validation, and model serialization.
 
-Asynchronous Core Engine (save_summary_model/app.py): An asynchronous ASGI pipeline managing Pydantic schema guardrails, regex-driven data sanitization, device context routing, and T5 auto-regressive generation execution.
+2. Asynchronous Core Engine (save_summary_model/app.py): An asynchronous ASGI pipeline managing Pydantic schema guardrails, regex-driven data sanitization, device context routing, and T5 auto-regressive generation execution.
 
-Frontend Client UI (save_summary_model/index.html): A modern presentation view utilizing state-driven asynchronous Javascript (Fetch API) to interface seamlessly with the backend endpoints without causing browser DOM reloads.
+3. Frontend Client UI (save_summary_model/index.html): A modern presentation view utilizing state-driven asynchronous Javascript (Fetch API) to interface seamlessly with the backend endpoints without causing browser DOM reloads.
 
 🛠️ Detailed Component Analysis
 1. The Machine Learning Core & Training Schema (Text_summarizer.ipynb)
