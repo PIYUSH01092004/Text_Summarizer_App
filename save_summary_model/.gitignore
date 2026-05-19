@@ -1,0 +1,50 @@
+# ====================================================================
+# Deep Learning Models & Serialized Weights (CRITICAL: Do not upload)
+# ====================================================================
+*.safetensors
+*.bin
+*.msgpack
+*.h5
+*.onnx
+*.pt
+*.pth
+
+# Ignore the specific local weights folder if you saved it under a subfolder
+save_summary_model/config.json
+save_summary_model/generation_config.json
+save_summary_model/special_tokens_map.json
+save_summary_model/tokenizer_config.json
+save_summary_model/tokenizer.json
+
+# ====================================================================
+# Datasets & Heavy CSV Files (Optional, but highly recommended)
+# ====================================================================
+samsum-train.csv
+samsum-validation.csv
+samsum-test.csv
+*.csv
+*.xlsx
+*.jsonl
+
+# ====================================================================
+# Python Runtime Caches & Environments
+# ====================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual Environments
+venv/
+ENV/
+env/
+.env
+
+# ====================================================================
+# Operating System Garbage Files
+# ====================================================================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
