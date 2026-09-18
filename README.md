@@ -1,47 +1,95 @@
-Deep Learning-Driven Abstractive Dialogue Summarization System
+# 📝 Text Summarizer — AI-Powered Content Condensation
 
+<div align="center">
 
-An end-to-end, hardware-optimized natural language processing (NLP) system designed to automate abstractive summary generation from multi-turn conversational transcripts. The architecture fine-tunes a T5 (Text-to-Text Transfer Transformer) sequence-to-sequence model on complex dialogue interactions, deploying it via a high-performance, asynchronous FastAPI backend coupled with a non-blocking, responsive vanilla web client.
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Transformers](https://img.shields.io/badge/Transformers-HuggingFace-F7931E?style=for-the-badge&logo=huggingface&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](#)
+[![API Docs](https://img.shields.io/badge/API_Docs-Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](#)
+![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)
 
-🏗️ Architectural Topology
+<p align="center">
+  <b>A Full-Stack AI Web Application Powered by FastAPI & HuggingFace T5</b><br>
+  Instantly condense long articles, dialogues, and paragraphs into concise, readable summaries.
+</p>
 
-The software design isolates the structural training and cross-validation pipelines from the highly optimized inference server component:
+</div>
 
-1. Model Engineering Module (Text_summarizer.ipynb): Houses the experimental sandbox, including token length distribution analysis, PyTorch optimization loops, hyperparameter metrics validation, and model serialization.
+---
 
-2. Asynchronous Core Engine (save_summary_model/app.py): An asynchronous ASGI pipeline managing Pydantic schema guardrails, regex-driven data sanitization, device context routing, and T5 auto-regressive generation execution.
+## 📖 Executive Summary
 
-3. Frontend Client UI (save_summary_model/index.html): A modern presentation view utilizing state-driven asynchronous Javascript (Fetch API) to interface seamlessly with the backend endpoints without causing browser DOM reloads.
+**Text Summarizer** is an end-to-end AI web application designed to help users quickly digest large amounts of text. By utilizing a pre-trained **T5 (Text-to-Text Transfer Transformer)** model, this application intelligently analyzes dialogues and long-form content, extracting the most vital information and presenting it in a short, crisp summary.
 
-🛠️ Detailed Component Analysis
-1. The Machine Learning Core & Training Schema (Text_summarizer.ipynb)
-Base Architecture: T5 (Text-to-Text Transfer Transformer). Unlike standard encoder-only or decoder-only models, T5 treats summarization explicitly as a text-to-text mapping constraint, making it highly adept at preserving conversational structures.
+The system is deployed as a production-ready **FastAPI** web server that handles tokenization, inference, and response formatting, accompanied by a stunning, modern glassmorphic web dashboard built with HTML, CSS, and JavaScript.
 
-Dataset Metrics: Fine-tuned utilizing the SAMSum Dataset (samsum-train.csv, samsum-validation.csv, samsum-test.csv). This corpus contains multi-turn, unstructured dialogues across varying social contexts with corresponding gold-standard expert summaries.
+---
 
-2. Stream Sanitization & Preprocessing Pipeline
-To maximize encoder-decoder attention alignment, raw text inputs are stripped of structural anomalies down to an O(n) linear compute sequence using Python's regular expressions engine:
+## ✨ Key Features
 
-Line-ending normalization: Eliminates Windows carriage returns (\r\n).
+### 🤖 **1. Advanced Natural Language Processing**
+- Powered by a fine-tuned **T5 Transformer model** from HuggingFace.
+- Seamlessly handles dialogue-based text and long paragraphs (max 512 tokens).
+- Fast and accurate text generation utilizing PyTorch tensor computations.
 
-Whitespace balancing: Collapses multi-token empty spacing segments down to a uniform spacing string.
+### ⚡ **2. High-Performance FastAPI Backend**
+- FastAPI asynchronous endpoint (`POST /summarize/`) with automatic request validation using **Pydantic**.
+- Integrated text-cleaning pipeline to strip HTML tags, extra spaces, and newlines before processing.
+- Model device auto-selection (CUDA, MPS, or CPU) for optimal performance.
 
-Metadata stripping: Discards unneeded markup anchors or custom HTML elements.
+### 🎨 **3. Glassmorphic Interactive Dashboard**
+- Modern dark-mode aesthetic built with pure CSS variables, backdrop blurs, dynamic glow accents, and floating orb background animations.
+- Real-time loading states and smooth CSS transitions.
+- One-click "Copy to Clipboard" functionality for the generated summary.
 
-3. Dynamic Hardware-Agnostic Context Allocation
-The server adaptively maps incoming tensor arrays across any underlying infrastructure context, ensuring seamless performance scalability on local workstations:
+### 🚀 **4. Production Ready**
+- Built-in static file rendering using `Jinja2Templates`.
+- Zero frontend build-step required; everything is optimized in a single responsive HTML view.
 
-Apple Silicon: Automatically utilizes Metal Performance Shaders (torch.device("mps")).
+---
 
-NVIDIA Infrastructure: Binds execution frames to Compute Unified Device Architecture blocks (torch.device("cuda")).
+## ⚙️ Architecture
 
-Fallback Environment: Utilizes vectorized math threads on traditional standard central units (torch.device("cpu")).
+### **Backend Pipeline**
+1. **Input Validation**: FastAPI + Pydantic schema ensures valid dialogue strings.
+2. **Text Preprocessing**: Regex-based cleaning (removes HTML, normalizes spaces).
+3. **Tokenization**: `T5Tokenizer` converts raw text into padded, truncated tensor IDs.
+4. **Inference**: `T5ForConditionalGeneration` model generates summary tokens using beam search (`num_beams=4`).
+5. **Decoding**: Tokens are converted back to human-readable text and returned as a JSON response.
 
-4. Inference Generation Hyperparameters
-To ensure the generative summary maintains contextual correctness without looping or cutting off thoughts midway, text decoding is executed with strict operational hyperparameters:
+### **Frontend Pipeline**
+- **UI Render**: `Jinja2Templates` serves `index.html` on the root (`/`) route.
+- **Client Action**: JavaScript intercepts form submission and initiates a `fetch` POST request.
+- **State Management**: Dynamic UI updates (spinners, disabling buttons, error catching, and success animations).
 
-Sequence Truncation (max_length=512): Binds input vectors safely to fit T5's positional embedding limitations.
+---
 
-Beam Search Exploration (num_beams=4): Spawns 4 conditional tracking paths concurrently, choosing the path with the highest joint log-probability across the token sequence.
+## 🚀 Deployment (Render.com)
 
-Structural Constraints (early_stopping=True, max_length=150): Halts decoding loops immediately when all beams reach an End-of-Sequence (</s>) token, preventing redundant text generation.
+This project is fully configured to be deployed on **Render.com** as a Web Service.
+
+1. **Root Directory**: `save_summary_model`
+2. **Build Command**: `pip install -r requirements.txt`
+3. **Start Command**: `uvicorn app:app --host 0.0.0.0 --port $PORT`
+
+---
+
+## 💻 Local Setup
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/PIYUSH01092004/Text_Summarizer_App.git
+cd Text_Summarizer_App
+
+# 2. Install dependencies
+pip install -r save_summary_model/requirements.txt
+
+# 3. Navigate to the app directory
+cd save_summary_model
+
+# 4. Start the server
+uvicorn app:app --reload --port 8000
+```
+Visit `http://localhost:8000` in your browser.

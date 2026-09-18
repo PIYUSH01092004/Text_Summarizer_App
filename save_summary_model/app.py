@@ -5,7 +5,7 @@ import torch
 import re
 from fastapi.templating import Jinja2Templates 
 from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
+
 
 # Initialize our fastapi app
 app=FastAPI(title="Text Summarizer App", description="Text Summarization using T5", version="1.0")
