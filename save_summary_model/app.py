@@ -10,9 +10,10 @@ from fastapi.responses import HTMLResponse
 # Initialize our fastapi app
 app=FastAPI(title="Text Summarizer App", description="Text Summarization using T5", version="1.0")
 
-# model and tokenizer
-model=T5ForConditionalGeneration.from_pretrained(".")
-tokenizer=T5Tokenizer.from_pretrained(".")
+# model and tokenizer — loaded from HuggingFace Hub for production deployment
+MODEL_ID = "piyush01092004/text-summarizer-t5"
+model=T5ForConditionalGeneration.from_pretrained(MODEL_ID)
+tokenizer=T5Tokenizer.from_pretrained(MODEL_ID)
 
 # Device 
 if torch.backends.mps.is_available():
