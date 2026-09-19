@@ -170,6 +170,20 @@
             cursor: not-allowed;
         }
 
+        .elapsed {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .timeout-hint {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+            display: none;
+            animation: fadeUp 0.4s ease;
+        }
+
         /* Spinner */
         .spinner {
             display: none;
@@ -300,7 +314,9 @@
             <button type="submit" class="btn-submit" id="submit-btn">
                 <span class="btn-text">Generate Summary</span>
                 <div class="spinner"></div>
+                <span class="elapsed" id="elapsed-timer" style="display:none"></span>
             </button>
+            <p class="timeout-hint" id="timeout-hint">⏳ T5 runs on CPU — this may take 15–45 seconds. Please wait…</p>
         </form>
 
         <div id="error-box" class="error-message"></div>
@@ -329,6 +345,32 @@
             const summaryText = document.getElementById("summary-text");
             const errorBox = document.getElementById("error-box");
             const copyBtn = document.getElementById("copy-btn");
+            const elapsedTimer = document.getElementById("elapsed-timer");
+            const timeoutHint = document.getElementById("timeout-hint");
+
+            let elapsedInterval = null;
+            let timeoutHintTimer = null;
+
+            function startTimers() {
+                let seconds = 0;
+                elapsedTimer.style.display = 'inline';
+                elapsedTimer.textContent = '0s';
+                elapsedInterval = setInterval(() => {
+                    seconds++;
+                    elapsedTimer.textContent = `${seconds}s`;
+                }, 1000);
+                // Show hint after 30 seconds
+                timeoutHintTimer = setTimeout(() => {
+                    timeoutHint.style.display = 'block';
+                }, 30000);
+            }
+
+            function stopTimers() {
+                clearInterval(elapsedInterval);
+                clearTimeout(timeoutHintTimer);
+                elapsedTimer.style.display = 'none';
+                timeoutHint.style.display = 'none';
+            }
 
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
@@ -341,6 +383,7 @@
                 outputBox.classList.remove('visible');
                 submitBtn.classList.add('loading');
                 submitBtn.disabled = true;
+                startTimers();
 
                 try {
                     const response = await fetch("/summarize/", {
@@ -350,7 +393,8 @@
                     });
 
                     if (!response.ok) {
-                        throw new Error(`Server error: ${response.status}`);
+                        const errData = await response.json().catch(() => ({}));
+                        throw new Error(errData.detail || `Server error: ${response.status}`);
                     }
 
                     const data = await response.json();
@@ -366,9 +410,10 @@
                         throw new Error("No summary returned from the server.");
                     }
                 } catch (err) {
-                    errorBox.innerText = `Error: ${err.message}. Make sure the backend server is running.`;
+                    errorBox.innerText = `Error: ${err.message}`;
                     errorBox.style.display = 'block';
                 } finally {
+                    stopTimers();
                     submitBtn.classList.remove('loading');
                     submitBtn.disabled = false;
                 }

@@ -1,7 +1,9 @@
 fastapi
-uvicorn
+uvicorn[standard]
 jinja2
-transformers
+transformers>=4.40.0
 torch
 huggingface_hub
 pydantic
+sentencepiece
+protobuf
