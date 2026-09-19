@@ -1,0 +1,12 @@
+# Ignore datasets (huge, not needed at runtime)
+samsum-train.csv
+samsum-test.csv
+samsum-validation.csv
+*.csv
+
+# Ignore notebooks
+*.ipynb
+
+# Ignore pycache
+__pycache__/
+*.pyc
